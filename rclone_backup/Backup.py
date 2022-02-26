@@ -11,7 +11,7 @@ pp = pp_printer.pprint
 class Backup:
     rclone = '/usr/bin/rclone'
 
-    def __init__(self, rclone_config, rclone_options=None, dry_run=False, verbose=False) -> None:
+    def __init__(self, rclone_config=None, rclone_options=None, dry_run=False, verbose=False) -> None:
         if rclone_options is None:
             rclone_options = [
                 '--no-update-modtime',
@@ -19,6 +19,9 @@ class Backup:
                 '--links',
                 '-q',
             ]
+        if rclone_config is None:
+            rclone_config = '~/.rclone.conf'
+        ##
         self.rclone_config = rclone_config
         self.rclone_options = rclone_options
         self.pre_backup_cmds = []
