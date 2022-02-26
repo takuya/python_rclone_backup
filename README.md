@@ -87,7 +87,8 @@ db_host, db_user, db_pass, db_name = ['localhost', 'mysql', 'password', 'db_name
 
 config = {
   'backup_pair':[
-    [f'mysqldump --single-transaction -h {db_host} -u {db_user} --password={db_pass} {db_name}| gzip -c - ',
+    [f'mysqldump --single-transaction -h {db_host} -u {db_user} --password={db_pass} {db_name}'
+     '| gzip -',
      'my-remote:/mysqldump.gz', 'pipe'],
    ]
 }
