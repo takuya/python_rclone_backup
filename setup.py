@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="rclone_back_up_command",
+    name="rclone_backup",
     version="0.1.0",
     author="takuya",
     author_email="takuya+nospam@gmail.com",
