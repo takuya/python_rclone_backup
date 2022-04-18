@@ -19,6 +19,11 @@ pyenv exec pipenv install
 
 ## for rclone backup
 
+- pre/post scripts
+- Archiving 
+- pipe 
+- config
+
 We know `rclone` is great. but backup come with messy procedure.
 
 This will make archiving more simple. add pipe, with `post backup` / `pre backup` commands to maintain.
@@ -28,9 +33,16 @@ for achive , pre/post scripts.
 
 ### Archiving and Pipe
 
-for archive , adding `archive` option alternatively to use `rclone sync`.
+tar for archive , adding `archive` option alternatively to use `rclone sync`.
+```python
+['./backup', 'my-remote:/archive-test.tgz', 'archive'],
+```
 
-for archive , adding `pipe` option alternatively to use `rclone sync`.
+pipe for archive , adding `pipe` option alternatively to use `rclone sync`.
+
+```python
+['mysqldump | gzip -c - ', 'my-remote:/mysqldump.sql.gz', 'pipe'],
+```
 
 ### backup config
 
