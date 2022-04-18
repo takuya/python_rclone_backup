@@ -2,6 +2,21 @@
 
 python_rclone_backup
 
+## install 
+
+sample, install by pip from github.
+```shell
+pip install git+https://github.com/takuya/python_rclone_backup.git#egg=rclone_backup
+```
+
+using pyenv and pipenv 
+```shell
+pyenv local 3.9.8
+pyenv exec pipenv install --python=3.9.8
+pyenv exec pipenv install git+https://github.com/takuya/python_rclone_backup.git#egg=rclone_backup
+pyenv exec pipenv install 
+```
+
 ## for rclone backup
 
 We know `rclone` is great. but backup come with messy procedure.
@@ -25,31 +40,33 @@ config using dict / list, for reducing shell script.
 
 ```python
 import os
-from rclone_backup.Backup import Backup
+import sys
+import rclone_backup
 
-config = {
-    'pre_backup':  {
-        "stop service": [
-            "sudo systemctl stop xxx.service",
-            "sudo tar cvzf /var/www www.tgz"
-        ]
-    },
-    'backup_pair': [
-        ['www.tgz', 'my-remote:/www.tgz', 'copy'],
-        ['./var/log', 'my-remote:/archive-test.tgz', 'archive'],
-        ['apt list --installed | gzip -c - ', 'my-remote:/apt-list.gz', 'pipe'],
-    ],
-    'post_backup': {
-        "start service": "sudo systemctl start xxx.service"
-    },
-}
-rclone_config = "~/.rclone.conf"
-rclone_opts = [
-    '--links',
-]
+project_root = os.path.realpath(os.path.dirname(os.path.realpath(__file__)) + "/..")
+sys.path.insert(0, project_root)
+from rclone_backup.Backup import Backup
 
 
 def main():
+    config = {
+        'pre_backup':  {
+            "stop service": "sudo systemctl stop xxx.service"
+        },
+        'backup_pair': [
+            ['./backup/Backup.py', 'my-remote:/', 'copy'],
+            ['./backup', 'my-remote:/archive-test.tgz', 'archive'],
+            ['apt list --installed | gzip -c - ', 'my-remote:/apt-list.gz', 'pipe'],
+        ],
+        'post_backup': {
+            "start service": "sudo systemctl start xxx.service"
+        },
+    }
+    rclone_config = "~/.rclone.conf"
+    rclone_opts = [
+        '--links',
+        '-q',
+    ]
     bk = Backup(rclone_config, rclone_opts, dry_run=(os.environ.get('dry_run') or False))
     bk.add_backup_list(config['backup_pair'])
     bk.add_pre_backup_cmd(config["pre_backup"])

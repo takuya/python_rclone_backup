@@ -1,6 +1,6 @@
 import os
 import sys
-
+import rclone_backup
 
 project_root = os.path.realpath(os.path.dirname(os.path.realpath(__file__)) + "/..")
 sys.path.insert(0, project_root)
@@ -13,7 +13,7 @@ def main():
             "stop service": "sudo systemctl stop xxx.service"
         },
         'backup_pair': [
-            ['./backup/Backup.py', 'my-remote:/Backup.py', 'copy'],
+            ['./backup/Backup.py', 'my-remote:/', 'copy'],
             ['./backup', 'my-remote:/archive-test.tgz', 'archive'],
             ['apt list --installed | gzip -c - ', 'my-remote:/apt-list.gz', 'pipe'],
         ],
